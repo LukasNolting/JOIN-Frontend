@@ -16,7 +16,7 @@ async function editTasksfromStorage(i) {
   tasks[i] = currenttask;
   setInitialsEdit();
   closeCardContainer();
-  await setItem("tasks", JSON.stringify(tasks));
+  await setItem("api/tasks", JSON.stringify(tasks));
   await renderBoardTasks();
   subtasksMessageEditBoard();
 }
@@ -255,7 +255,7 @@ function filterCategory(categorys, searchinput) {
  */
 async function deleteTask(i) {
   tasks.splice(i, 1);
-  await setItem("tasks", JSON.stringify(tasks));
+  await setItem("api/tasks", JSON.stringify(tasks));
   updateHTML();
   closeCardContainer();
   deleteTaskMessage();
@@ -270,7 +270,7 @@ async function deleteTask(i) {
 async function checkSubtasks(i, j) {
   let status = document.getElementById(`subtask${j}`).checked;
   currenttask.subtasks[j]["subtaskStatus"] = status;
-  await setItem("tasks", JSON.stringify(tasks));
+  await setItem("api/tasks", JSON.stringify(tasks));
   updateHTML();
 }
 

@@ -360,5 +360,5 @@ async function setJson(input, title, description, date, categoryTask) {
     colors: usercolorsassignedto,
   };
   tasks.push(jsontopush);
-  await setItem("tasks", JSON.stringify(tasks));
+  await setItem("api/tasks", jsontopush);
 }

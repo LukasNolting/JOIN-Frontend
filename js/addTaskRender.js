@@ -8,7 +8,7 @@ function renderAssignedTo(handler) {
     let assigncontent = document.getElementById("edit-assigned-list");
     assigncontent.innerHTML = "";
     remoteuserassign.forEach((element, i) => {
-      const fullname = element.name;
+      const fullname = element.first_name + " " + element.last_name;
       const initials = element.initials;
       const color = element.color;
       assigncontent.innerHTML += /*html*/ `<li id="edit-catergory_list_${i}">
@@ -31,7 +31,7 @@ function renderAssignedTo(handler) {
     let assigncontent = document.getElementById(`${handler}assigned-list`);
     assigncontent.innerHTML = "";
     remoteuserassign.forEach((element, i) => {
-      const fullname = element.name;
+      const fullname = element.first_name + " " + element.last_name;
       const initials = element.initials;
       const color = element.color;
       assigncontent.innerHTML += /*html*/ `<li id="${handler}catergory_list_${i}">

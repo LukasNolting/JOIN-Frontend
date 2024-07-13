@@ -1,16 +1,5 @@
-let STORAGETOKEN = [];
+let STORAGETOKEN = ['2bb42f4827992fd1d3e5cf54159d937770081b70'];
 const STORAGEURL = `http://127.0.0.1:8000/`;
-
-/**
- * Asynchronously loads the token from the specified JSON file and sets the STORAGETOKEN value.
- *
- * @return {Promise<void>} A Promise that resolves when the token is successfully loaded and the STORAGETOKEN value is set.
- */
-// async function loadToken() {
-//   let resp = await fetch("./json/token.json");
-//   token = await resp.json();
-//   STORAGETOKEN = token[0]["token"];
-// }
 
 /**
  * Asynchronously sets an item in the storage.
@@ -20,7 +9,6 @@ const STORAGEURL = `http://127.0.0.1:8000/`;
  * @return {Promise} A Promise that resolves to the result of setting the item in the storage.
  */
 async function setItem(key, value) {
-  // await loadToken();
   const payload = value;
   console.log(payload);
   console.log(JSON.stringify(payload));
@@ -38,24 +26,43 @@ return
 }
 
 
-/**
- * Asynchronously retrieves an item from the storage using the provided key.
- *
- * @param {string} key - The key of the item to retrieve from the storage.
- * @return {Promise} A promise that resolves to the value of the retrieved item.
- */
+// /**
+//  * Asynchronously retrieves an item from the storage using the provided key.
+//  *
+//  * @param {string} key - The key of the item to retrieve from the storage.
+//  * @return {Promise} A promise that resolves to the value of the retrieved item.
+//  */
+// async function getItem(key) {
+//   const url = `http://127.0.0.1:8000/api/tasks/`;
+//   return await fetch(url)
+//     .then((res) => res.json())
+//     .then((res) => {
+//       if (res.data) {
+//         return res.data.value;
+//       }
+//       throw `Could not find data with key "${key}".`;
+//     });
+// }
+
 async function getItem(key) {
-  // await loadToken();
-  const url = `${STORAGEURL}${key}/`;
-  return fetch(url)
-    .then((res) => res.json())
-    .then((res) => {
-      if (res.data) {
-        return res.data.value;
-      }
-      throw `Could not find data with key "${key}".`;
-    });
+  const url = `${STORAGEURL}${key}/`; // Korrigierte URL mit Protokoll
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json(); // Die Antwort als JSON parsen
+    if (Array.isArray(data) && data.length > 0) {
+      return data; // Rückgabe des gesamten Datenobjekts
+    } else {
+      throw new Error(`Could not find data with key "${key}".`);
+    }
+  } catch (error) {
+    console.error('There has been a problem with your fetch operation:', error);
+    throw error;
+  }
 }
+
 
 /**
  * Asynchronously loads the user data from storage and handles any potential errors.
@@ -70,7 +77,6 @@ async function loadUser() {
 }
 
 async function loginRequest(email, password){
-  // await loadToken();
   const url = `${STORAGEURL}login/`;
   const options = {
     method: "POST",
@@ -108,7 +114,7 @@ async function loginRequest(email, password){
  */
 async function loadTasks() {
   try {
-    tasks = JSON.parse(await getItem("tasks"));
+    tasks = await getItem("api/tasks");
   } catch (e) {
     console.error("Loading error:", e);
   }
@@ -135,17 +141,21 @@ async function loadContacts() {
 async function loadRemoteUser() {
   remoteuserassign = [];
   try {
-    remoteuser = JSON.parse(await getItem("users"));
+    const response = await fetch(`${STORAGEURL}api/users/`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const remoteuser = await response.json();
     for (let i = 0; i < remoteuser.length; i++) {
       if (remoteuser[i].id !== 999) {
         remoteuserassign.push(remoteuser[i]);
       }
     }
-    remoteuser = [];
   } catch (e) {
     console.error("Loading error:", e);
   }
 }
+
 
 /**
  * Saves the users array to the local storage.

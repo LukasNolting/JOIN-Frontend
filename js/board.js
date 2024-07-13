@@ -105,7 +105,7 @@ async function updateHTML() {
     // renderFinishCounter(i);
     finishcounter = 0;
   });
-  await setItem("tasks", JSON.stringify(tasks));
+  // await setItem("api/tasks", tasks);
   setAmounts();
 }
 
@@ -341,7 +341,7 @@ function finishedSubtasks(tasksid) {
 function usersAssignTask(userid) {
   for (let i = 0; i < remoteuserassign.length; i++) {
     if (remoteuserassign[i].id === userid) {
-      return remoteuserassign[i].name;
+      return remoteuserassign[i].first_name + " " + remoteuserassign[i].last_name;
     }
   }
 }
