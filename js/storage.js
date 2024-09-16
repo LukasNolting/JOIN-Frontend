@@ -18,49 +18,35 @@ async function setItem(key, value) {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Token ${STORAGETOKEN}`,
-    },    
+    },
     body: JSON.stringify(payload),
   }).then((res) => console.log(res.json())
-);
-return  
+  );
+  return res
 }
 
 
-// /**
-//  * Asynchronously retrieves an item from the storage using the provided key.
-//  *
-//  * @param {string} key - The key of the item to retrieve from the storage.
-//  * @return {Promise} A promise that resolves to the value of the retrieved item.
-//  */
-// async function getItem(key) {
-//   const url = `http://127.0.0.1:8000/api/tasks/`;
-//   return await fetch(url)
-//     .then((res) => res.json())
-//     .then((res) => {
-//       if (res.data) {
-//         return res.data.value;
-//       }
-//       throw `Could not find data with key "${key}".`;
-//     });
-// }
-
-async function getItem(key) {
+async function deleteItem(key) {
   const url = `${STORAGEURL}${key}/`; // Korrigierte URL mit Protokoll
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: 'DELETE',
+    });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    const data = await response.json(); // Die Antwort als JSON parsen
-    if (Array.isArray(data) && data.length > 0) {
-      return data; // Rückgabe des gesamten Datenobjekts
-    } else {
-      throw new Error(`Could not find data with key "${key}".`);
-    }
+    return response.json(); // Die Antwort als JSON parsen
   } catch (error) {
     console.error('There has been a problem with your fetch operation:', error);
     throw error;
   }
+}
+
+async function getItem(key) {
+  const url = `${STORAGEURL}${key}/`; // Korrigierte URL mit Protokoll
+  const response = await fetch(url);
+  const data = await response.json(); // Die Antwort als JSON parsen
+  return data; // Rückgabe des gesamten Datenobjekts
 }
 
 
@@ -76,13 +62,13 @@ async function loadUser() {
   }
 }
 
-async function loginRequest(email, password){
+async function loginRequest(email, password) {
   const url = `${STORAGEURL}login/`;
   const options = {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
-    },    
+    },
     body: JSON.stringify({
       username: email,
       password: password,
@@ -119,6 +105,19 @@ async function loadTasks() {
     console.error("Loading error:", e);
   }
 }
+
+async function loadTasksCard(id) {
+  console.log(id);
+  try {
+    task = await getItem(`api/tasks/${id}`);
+
+    console.log(task);
+
+  } catch (e) {
+    console.error("Loading error:", e);
+  }
+}
+
 
 /**
  * Asynchronously loads contacts from storage and handles any potential errors.

@@ -30,7 +30,7 @@ async function includeHTMLInit(input) {
  */
 function renderFilteredCard(task, i, categorys) {
   document.getElementById(categorys).innerHTML += `
-  <div class="card-board" draggable="true" ondragstart="rotateCardStart(${i}),moveToLocation(${i}),highlight()" id="board-card${i}" onclick="openCard(${i})" ondragend="rotateCardEnd()">
+  <div class="card-board" draggable="true" ondragstart="rotateCardStart(${i}),moveToLocation(${i}),highlight()" id="board-card${i}" onclick="openCard(${i}, ${task.id})" ondragend="rotateCardEnd()">
     <div class="frame-119">
       <div class="card-board-user-story">
         <span class="card-board-user-story-text">${task.category}</span>
@@ -181,8 +181,9 @@ function renderUpdateColoredBadges(assigned, colorbg, assign) {
  * @param {type} i - the index of the task
  */
 function renderUpdateHTML(task, i) {
+  
   document.getElementById(task.categoryboard).innerHTML += /*html*/ `
-        <div class="card-board" draggable="true" ondragstart="rotateCardStart(${i}),moveToLocation(${i}),highlight()" id="board-card${i}" onclick="openCard(${i})" ondragend="rotateCardEnd()">
+        <div class="card-board" draggable="true" ondragstart="rotateCardStart(${i}),moveToLocation(${i}),highlight()" id="board-card${i}" onclick="openCard(${i}, ${task.id})" ondragend="rotateCardEnd()">
             <div class="frame-119">
               <div class="frame-119-flex">
                 <div class="card-board-user-story" id="card-board-category${i}">

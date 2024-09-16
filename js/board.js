@@ -260,8 +260,10 @@ function rotateCardEnd() {
  * @param {number} i - The index of the card to be opened.
  * @return {Promise<void>} A promise that resolves when the card is successfully opened.
  */
-async function openCard(i) {
-  await loadTasks();
+async function openCard(i, task) {
+  console.log(task);
+  tasks1 = tasks[i];
+  await loadTasksCard(tasks1.id);
   currenttask = tasks[i];
   openCardContainer();
   renderCardInfo(i);
