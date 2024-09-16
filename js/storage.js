@@ -10,11 +10,33 @@ const STORAGEURL = `http://127.0.0.1:8000/`;
  */
 async function setItem(key, value) {
   const payload = value;
+  console.log("Key:", key);
+  console.log(value);  
   console.log(payload);
   console.log(JSON.stringify(payload));
   console.log();
   let res = await fetch(STORAGEURL + key + "/", {
     method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Token ${STORAGETOKEN}`,
+    },
+    body: JSON.stringify(payload),
+  }).then((res) => console.log(res.json())
+  );
+  return res
+}
+
+
+async function putItem(key, value) {
+  const payload = value;
+  console.log("Key:", key);
+  console.log(value);
+  console.log(payload);
+  console.log(JSON.stringify(payload));
+  console.log();
+  let res = await fetch(STORAGEURL + key + "/", {
+    method: "PUT",
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Token ${STORAGETOKEN}`,

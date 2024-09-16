@@ -267,10 +267,12 @@ async function deleteTask(i) {
  * @param {number} i - The index of the subtask.
  * @param {number} j - The index of the current task.
  */
-async function checkSubtasks(i, j) {
-  let status = document.getElementById(`subtask${j}`).checked;
-  currenttask.subtasks[j]["subtaskStatus"] = status;
-  await setItem("api/tasks", JSON.stringify(tasks));
+async function checkSubtasks(taskindex, subtaskid) {
+  let status = document.getElementById(`subtask${subtaskid}`).checked;
+  currenttask.subtasks[subtaskid]["subtaskStatus"] = status;
+  let task = tasks[taskindex];
+  console.log(task);  
+  await putItem(`api/tasks/${task.id}`, task);
   updateHTML();
 }
 
