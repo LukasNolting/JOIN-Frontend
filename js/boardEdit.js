@@ -16,10 +16,12 @@ async function editTasksfromStorage(i) {
   tasks[i] = currenttask;
   setInitialsEdit();
   closeCardContainer();
-  await setItem("api/tasks", JSON.stringify(tasks));
+  console.log(currenttask);  
+  await putItem(`api/tasks/${task.id}`, currenttask);
   await renderBoardTasks();
   subtasksMessageEditBoard();
 }
+
 
 /**
  * Edit subtasks for a given task.
@@ -32,12 +34,13 @@ function editSubtasks(i) {
   subtasksaddcard.push(subtasksadd[0]);
   document.getElementById(`edit-subtasks-container`).innerHTML = "";
   for (let j = 0; j < currenttask.subtasks.length; j++) {
-    const element = currenttask.subtasks[j].subtaskName;
+    const element = currenttask.subtasks[j].title;
     let content = document.getElementById(`edit-subtasks-container`);
     renderEditSubtasks(element, content, i, j);
   }
   subtasksadd = [];
 }
+
 
 /**
  * Edit the subtask card with the specified index.
@@ -47,10 +50,11 @@ function editSubtasks(i) {
  */
 function editSubtaskCard(i, j) {
   let container = document.getElementById(`subtask-comp-${j}`);
-  let textcontent = currenttask.subtasks[j].subtaskName;
+  let textcontent = currenttask.subtasks[j].title;
   container.innerHTML = editSubTaskHtmlCard(textcontent, i, j);
   hideSubtaskIconsCard(j);
 }
+
 
 /**
  * Function to add or edit a subtask card.
@@ -63,11 +67,12 @@ async function addEditSubTaskCard(i, j) {
   if (subtaskinput.length <= 1) {
     subtasksMessage();
   } else {
-    currenttask.subtasks[j].subtaskName = subtaskinput;
+    currenttask.subtasks[j].title = subtaskinput;
     editSubtaskCard(i, j);
     renderAddSubtasksCard(i);
   }
 }
+
 
 /**
  * Opens the edit assign box for a given index and handler, and performs necessary actions based on the visibility state of the box.
@@ -87,6 +92,7 @@ function openEditAssignTo(i, handler) {
   setBoxListener(assingbox);
 }
 
+
 /**
  * Opens the edit category box and sets the category input to be disabled or enabled based on the current state of the category box visibility.
  *
@@ -103,6 +109,7 @@ function openEditCategory() {
   }
   setBoxListener(categorybox);
 }
+
 
 /**
  * Function to set badges for adding and editing tasks.
@@ -124,6 +131,7 @@ function setBadgesAddTaskEdit() {
   renderBadgesAddTaskEdit();
 }
 
+
 /**
  * Edit a card.
  *
@@ -136,6 +144,7 @@ function editCard(i) {
   renderEditCard(content, i);
   taskPriorityChoosed(taskpriority, "edit-");
 }
+
 
 /**
  * Toggles the styling of elements based on checkbox state.
@@ -154,6 +163,7 @@ function toggleCheckbox(id, isChecked) {
   }
 }
 
+
 /**
  * Function to toggle the true box and add class to elements if necessary, and push and sort id into usersassignedto array if not already included.
  *
@@ -170,6 +180,7 @@ function toggleTrueBox(id, divelement, parentdivelement) {
     usersassignedto.sort();
   }
 }
+
 
 /**
  * Remove the "white" class from the divelement and the "contact_background" class from the parentdivelement,
@@ -189,6 +200,7 @@ function toggleFalseBox(id, divelement, parentdivelement) {
   }
 }
 
+
 /**
  * Sets checkboxes for editing a card.
  *
@@ -203,6 +215,7 @@ function setCheckBoxesEdit(editingcard) {
     toggleCheckbox(id, checkbox.checked);
   });
 }
+
 
 /**
  * Sets the initials, IDs, and colors for the current task based on the users assigned to it.
@@ -227,6 +240,7 @@ function setInitialsEdit() {
   }
 }
 
+
 /**
  * Filter tasks based on a specific category and search input, and update the HTML accordingly.
  *
@@ -248,18 +262,22 @@ function filterCategory(categorys, searchinput) {
   });
 }
 
+
 /**
  * Delete a task from the tasks list, update the stored tasks, update the HTML, and close the card container.
  *
  * @param {number} i - The index of the task to delete
  */
 async function deleteTask(i) {
-  tasks.splice(i, 1);
-  await setItem("api/tasks", JSON.stringify(tasks));
+  taskid = tasks[i]["id"];
+  console.log(taskid);
+  await deleteItem(`api/tasks/${taskid}`);
+  loadTasks();
   updateHTML();
   closeCardContainer();
   deleteTaskMessage();
 }
+
 
 /**
  * Asynchronously checks the status of a subtask and updates the task list in the HTML.
@@ -269,12 +287,14 @@ async function deleteTask(i) {
  */
 async function checkSubtasks(taskindex, subtaskid) {
   let status = document.getElementById(`subtask${subtaskid}`).checked;
+  console.log(status);
   currenttask.subtasks[subtaskid]["subtaskStatus"] = status;
   let task = tasks[taskindex];
-  console.log(task);  
+  console.log(task);
   await putItem(`api/tasks/${task.id}`, task);
   updateHTML();
 }
+
 
 /**
  * Adds a subtask to the current task based on the input value from the "edit-subtasks" element.
@@ -289,7 +309,7 @@ function addSubtasksCard(i, event) {
   }
   if (subtaskstoadd) {
     let jsontopush = {
-      subtaskName: subtaskstoadd,
+      title: subtaskstoadd,
       subtaskStatus: false,
     };
     currenttask.subtasks.push(jsontopush);
@@ -297,6 +317,7 @@ function addSubtasksCard(i, event) {
     renderAddSubtasksCard(i);
   }
 }
+
 
 /**
  * Deletes a subtask card from the current task.
@@ -308,6 +329,7 @@ function deleteSubtaskCard(i, j) {
   currenttask.subtasks.splice(j, 1);
   renderAddSubtasksCard(j);
 }
+
 
 /**
  * Function to show subtask icons card.
@@ -322,6 +344,7 @@ function showSubtaskIconsCard(i, j) {
     .classList.add("subtask-background");
 }
 
+
 /**
  * Hides the subtask icons card for a given index.
  *
@@ -335,6 +358,7 @@ function hideSubtaskIconsCard(i, j) {
     .classList.remove("subtask-background");
 }
 
+
 /**
  * Resets the subtasks card by clearing the value of the "edit-subtasks" element.
  *
@@ -342,6 +366,7 @@ function hideSubtaskIconsCard(i, j) {
 function resetSubtasksCard() {
   document.getElementById("edit-subtasks").value = ``;
 }
+
 
 /**
  * Assigns users to help with the current task.
@@ -355,6 +380,7 @@ function usersAssignedToHelp() {
     currenttask["assignedToID"].push(element);
   }
 }
+
 
 /**
  * Opens the burger board and performs related actions.

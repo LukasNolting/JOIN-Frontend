@@ -81,13 +81,15 @@ function contactAnimation() {
  */
 async function deleteContact(userid) {
   const indextodelete = contacts.findIndex((contact) => contact.id === userid);
-  if (indextodelete !== -1) {
+  // if (indextodelete !== -1) {
     contacts.splice(indextodelete, 1);
-    await setItem("contacts", JSON.stringify(contacts));
-    renderContacts();
+    console.log(userid);
+    
+    await deleteItem(`api/contacts/${userid}`);
     document.getElementById("contact_info").innerHTML = "";
     addContactListeners();
-  }
+  // }
+  renderContacts();
   contactDeletedMessage();
 }
 
@@ -128,7 +130,7 @@ async function addEditContact(i) {
   let newcolor = currentcontact.color;
   let newinitials = currentcontact.initials;
   contacts[i] = currentcontact;
-  await setItem("contacts", JSON.stringify(contacts));
+  await putItem(`api/contacts/${contacts[i].id}`,contacts[i]);
   closeContactsContainer();
   renderContacts();
   openContact(
@@ -179,9 +181,8 @@ function addContactsToStorage() {
  *
  */
 async function addNewContact() {
-  pushContacts();
+  await pushContacts();
   closeContactsContainer();
-  await setItem("contacts", JSON.stringify(contacts));
   pushLetters();
   addContactListeners();
 }
@@ -191,7 +192,7 @@ async function addNewContact() {
  *
  * @param {type} jsontopush - the JSON object containing contact information to be pushed into the contacts array
  */
-function pushContacts() {
+async function pushContacts() {
   let jsontopush = {
     firstname: firstname,
     lastname: lastname,
@@ -202,8 +203,9 @@ function pushContacts() {
     color: color,
     id: `${contacts.length}`,
     taskassigned: false,
-    contactAssignedTo: users[0].id,
+    contactAssignedTo: users[0].user_id,
   };
+  await setItem("api/contacts", jsontopush);
   clearAfterPush(jsontopush);
 }
 

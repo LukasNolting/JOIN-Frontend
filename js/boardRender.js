@@ -260,7 +260,7 @@ function renderMoveToButtons(taskID) {
 function renderAddSubtasksCard(i) {
   document.getElementById("edit-subtasks-container").innerHTML = "";
   for (let j = 0; j < currenttask.subtasks.length; j++) {
-    const element = currenttask.subtasks[j].subtaskName;
+    const element = currenttask.subtasks[j].title;
     let content = document.getElementById("edit-subtasks-container");
     content.innerHTML += /*html*/ `
       <div id="subtask-comp-${j}">
@@ -330,14 +330,12 @@ function renderBadgesEdit(initials, color, content, i) {
     content.innerHTML += /*html*/ `<div class="assigned-to-add-task-user" style="background-color: ${color}">${initials}</div>`;
   }
   if (i == 4) {
-    content.innerHTML += /*html*/ `<div id="grey_badge" class="assigned-to-add-task-user" style="background-color: grey">+${
-      i - 3
-    }</div>`;
+    content.innerHTML += /*html*/ `<div id="grey_badge" class="assigned-to-add-task-user" style="background-color: grey">+${i - 3
+      }</div>`;
   }
   if (i > 4) {
-    document.getElementById("grey_badge").innerHTML = /*html*/ `+${
-      i - 3
-    }</div>`;
+    document.getElementById("grey_badge").innerHTML = /*html*/ `+${i - 3
+      }</div>`;
   }
 }
 

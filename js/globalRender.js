@@ -113,13 +113,13 @@ function renderFinishCounter(id) {
 function renderSubtasksInfos(i) {
   let subtasks = tasks[i].subtasks;
   for (let j = 0; j < subtasks.length; j++) {
-    const element = subtasks[j].subtaskName;
+    const element = subtasks[j].title;
     if (subtasks[j]["subtaskStatus"] === false) {
       let subtasksTask = document.getElementById("subtask-items");
-      subtasksTask.innerHTML += renderSubtasksInfosHTML(i, j, element,'');
+      subtasksTask.innerHTML += renderSubtasksInfosHTML(i, j, element, '');
     } else {
       let subtasksTask = document.getElementById("subtask-items");
-      subtasksTask.innerHTML += renderSubtasksInfosHTML(i, j, element,'checked');
+      subtasksTask.innerHTML += renderSubtasksInfosHTML(i, j, element, 'checked');
     }
   }
 }
@@ -152,7 +152,7 @@ function renderUpdateGreyBadge(assigned, j, i) {
   assigned.innerHTML += `
     <div class="card-board-profile-batch">
       <div class="group-9-board">
-        <div id="grey_badge${i}" class="group-9-text" style="background-color: grey;">+${j-3}</div>
+        <div id="grey_badge${i}" class="group-9-text" style="background-color: grey;">+${j - 3}</div>
       </div>
     </div>`;
 }
@@ -181,7 +181,7 @@ function renderUpdateColoredBadges(assigned, colorbg, assign) {
  * @param {type} i - the index of the task
  */
 function renderUpdateHTML(task, i) {
-  
+
   document.getElementById(task.categoryboard).innerHTML += /*html*/ `
         <div class="card-board" draggable="true" ondragstart="rotateCardStart(${i}),moveToLocation(${i}),highlight()" id="board-card${i}" onclick="openCard(${i}, ${task.id})" ondragend="rotateCardEnd()">
             <div class="frame-119">
@@ -247,7 +247,7 @@ function prioChecker(task, i) {
 function renderAddSubtasks() {
   document.getElementById("subtasks-container").innerHTML = "";
   for (let i = 0; i < subtasksadd.length; i++) {
-    const element = subtasksadd[i].subtaskName;
+    const element = subtasksadd[i].title;
     let content = document.getElementById("subtasks-container");
     content.innerHTML += /*html*/ `
       <div id="subtask-comp-${i}">

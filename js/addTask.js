@@ -132,7 +132,7 @@ function addSubtasks() {
   let subtaskstoadd = document.getElementById("subtasks").value;
   if (subtaskstoadd) {
     let jsontopush = {
-      subtaskName: subtaskstoadd,
+      title: subtaskstoadd,
       subtaskStatus: false,
     };
     subtasksadd.push(jsontopush);
@@ -160,7 +160,7 @@ function checkOnKeyDown(event) {
  */
 function editSubtask(i) {
   let container = document.getElementById(`subtask-comp-${i}`);
-  let textcontent = subtasksadd[i].subtaskName;
+  let textcontent = subtasksadd[i].title;
   container.innerHTML = editSubTaskHtml(textcontent, i);
   hideSubtaskIcons(i);
 }
@@ -208,7 +208,7 @@ function subtasksOnKeyDownAddTask(event, i) {
 function addEditSubTask(i) {
   let subtaskinput = document.getElementById(`editSubTaskInput${i}`).value;
   if (subtaskinput.length >= 1) {
-    subtasksadd[i].subtaskName = subtaskinput;
+    subtasksadd[i].title = subtaskinput;
     renderAddSubtasks(i);
   }
 }

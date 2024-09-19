@@ -30,11 +30,7 @@ async function setItem(key, value) {
 
 async function putItem(key, value) {
   const payload = value;
-  console.log("Key:", key);
-  console.log(value);
-  console.log(payload);
-  console.log(JSON.stringify(payload));
-  console.log();
+  console.log("value:", payload);
   let res = await fetch(STORAGEURL + key + "/", {
     method: "PUT",
     headers: {
@@ -57,7 +53,7 @@ async function deleteItem(key) {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    return response.json(); // Die Antwort als JSON parsen
+    // return response.json(); // Die Antwort als JSON parsen
   } catch (error) {
     console.error('There has been a problem with your fetch operation:', error);
     throw error;
@@ -123,6 +119,9 @@ async function loginRequest(email, password) {
 async function loadTasks() {
   try {
     tasks = await getItem("api/tasks");
+    tasks.forEach(element => {
+      console.log(element);
+    });
   } catch (e) {
     console.error("Loading error:", e);
   }
@@ -147,7 +146,7 @@ async function loadTasksCard(id) {
  */
 async function loadContacts() {
   try {
-    contacts = JSON.parse(await getItem("contacts"));
+    contacts = await getItem("api/contacts");
   } catch (e) {
     console.error("Loading error:", e);
   }

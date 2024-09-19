@@ -18,8 +18,7 @@ let filteredtasks;
  */
 async function renderBoardTasks() {
   await loadRemoteUser();
-  await loadTasks();
-  updateHTML();
+  await updateHTML();
   removeActiveClass();
   setActivClass("board")
 }
@@ -83,7 +82,13 @@ function highlight() {
  * @param {type} category - the category to move the element to
  */
 function moveTo(category) {
+  //task updaten mit PUT und category überschreiben
   tasks[currentdraggedelement]["categoryboard"] = category;
+  taskid = tasks[currentdraggedelement]["id"]
+  let task = tasks[currentdraggedelement];
+  console.log(taskid);
+  putItem(`api/tasks/${taskid}`, task);
+  // loadTasks();
   updateHTML();
   closeCardContainer();
 }
@@ -94,6 +99,8 @@ function moveTo(category) {
  *
  */
 async function updateHTML() {
+  // task aus dem backend holen mit GET
+  await loadTasks();
   document.getElementById("todo").innerHTML = "";
   document.getElementById("in-progress").innerHTML = "";
   document.getElementById("await-feedback").innerHTML = "";
