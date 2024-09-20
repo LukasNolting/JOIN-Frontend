@@ -166,7 +166,7 @@ function renderLoginHTML() {
                 <div class="text-wrapper-3" id="wrongPassword">Invalid Password or E-Mail</div>
               </div>
             </div>
-            <div class="frame-6">
+            <!-- <div class="frame-6">
               <div class="frame-7">
                 <div class="check-button">
                   <label for="signUpCheck" id="parent_signUpCheck" onclick="toogleChecker('remember')">
@@ -175,7 +175,7 @@ function renderLoginHTML() {
                 </div>
                 <div class="text-wrapper-4">Remember me</div>
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="frame-176">
             <div class="button-wo-icon" type="submit" onclick="login(event)">

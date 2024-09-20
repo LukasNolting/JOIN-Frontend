@@ -88,7 +88,7 @@ function moveTo(category) {
   let task = tasks[currentdraggedelement];
   console.log(taskid);
   putItem(`api/tasks/${taskid}`, task);
-  // loadTasks();
+  loadTasks();
   updateHTML();
   closeCardContainer();
 }
@@ -302,6 +302,7 @@ function closeCardContainer() {
   document
     .getElementById("card-background")
     .removeEventListener("click", cardBackgroundClickHandler);
+  updateHTML();  
 }
 
 

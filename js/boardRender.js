@@ -146,7 +146,7 @@ function renderEditCard(content, i) {
                 onclick="changeButtonsCard(event)"
                 class="subtasks"
                 placeholder="Add new subtask"
-                onkeydown="addSubtasksCard(${i}, event)"
+                onkeydown="if(event.key === 'Enter') addSubtasksCard(${i}, event)"
               />
               <div class="subtasks_buttons">
                 <img

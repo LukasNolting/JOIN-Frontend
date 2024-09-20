@@ -166,8 +166,10 @@ async function loadRemoteUser() {
       throw new Error('Network response was not ok');
     }
     const remoteuser = await response.json();
+    console.log(remoteuser);
+    
     for (let i = 0; i < remoteuser.length; i++) {
-      if (remoteuser[i].id !== 999) {
+      if (remoteuser[i].id !== 999 && remoteuser[i].is_superuser === false) {
         remoteuserassign.push(remoteuser[i]);
       }
     }

@@ -292,7 +292,7 @@ async function checkSubtasks(taskindex, subtaskid) {
   let task = tasks[taskindex];
   console.log(task);
   await putItem(`api/tasks/${task.id}`, task);
-  updateHTML();
+  // updateHTML();
 }
 
 

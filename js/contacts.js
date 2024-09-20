@@ -131,6 +131,7 @@ async function addEditContact(i) {
   let newinitials = currentcontact.initials;
   contacts[i] = currentcontact;
   await putItem(`api/contacts/${contacts[i].id}`,contacts[i]);
+  contacts = await getItem("api/contacts");
   closeContactsContainer();
   renderContacts();
   openContact(
@@ -158,7 +159,7 @@ async function addEditContact(i) {
  * @param {type} firstname - The first name of the contact
  * @param {type} color - The random color assigned to the contact
  */
-function addContactsToStorage() {
+async function addContactsToStorage() {
   nameinput = document.getElementById("add_contacts_name").value.split(" ");
   contactname = document.getElementById("add_contacts_name");
   email = document.getElementById("add_contacts_email");
@@ -173,6 +174,8 @@ function addContactsToStorage() {
   firstname = nameinput[0];
   color = getRandomColor();
   addNewContact();
+  contacts = await getItem("api/contacts");
+  renderContacts();
   contactAddedMessage();
 }
 
