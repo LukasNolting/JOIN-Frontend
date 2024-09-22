@@ -86,7 +86,6 @@ function moveTo(category) {
   tasks[currentdraggedelement]["categoryboard"] = category;
   taskid = tasks[currentdraggedelement]["id"]
   let task = tasks[currentdraggedelement];
-  console.log(taskid);
   putItem(`api/tasks/${taskid}`, task);
   loadTasks();
   updateHTML();
@@ -268,7 +267,6 @@ function rotateCardEnd() {
  * @return {Promise<void>} A promise that resolves when the card is successfully opened.
  */
 async function openCard(i, task) {
-  console.log(task);
   tasks1 = tasks[i];
   await loadTasksCard(tasks1.id);
   currenttask = tasks[i];

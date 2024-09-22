@@ -1,5 +1,10 @@
-let STORAGETOKEN = ['2bb42f4827992fd1d3e5cf54159d937770081b70'];
 const STORAGEURL = `http://127.0.0.1:8000/`;
+
+
+let active_user = localStorage.getItem("users");
+let localjson = JSON.parse(localStorage.getItem("users"));
+let STORAGETOKEN = localjson[0].token;
+
 
 /**
  * Asynchronously sets an item in the storage.
@@ -10,11 +15,6 @@ const STORAGEURL = `http://127.0.0.1:8000/`;
  */
 async function setItem(key, value) {
   const payload = value;
-  console.log("Key:", key);
-  console.log(value);  
-  console.log(payload);
-  console.log(JSON.stringify(payload));
-  console.log();
   let res = await fetch(STORAGEURL + key + "/", {
     method: "POST",
     headers: {
@@ -22,15 +22,15 @@ async function setItem(key, value) {
       'Authorization': `Token ${STORAGETOKEN}`,
     },
     body: JSON.stringify(payload),
-  }).then((res) => console.log(res.json())
-  );
+  })
   return res
 }
 
 
 async function putItem(key, value) {
   const payload = value;
-  console.log("value:", payload);
+  console.log(payload);
+  
   let res = await fetch(STORAGEURL + key + "/", {
     method: "PUT",
     headers: {
@@ -38,8 +38,8 @@ async function putItem(key, value) {
       'Authorization': `Token ${STORAGETOKEN}`,
     },
     body: JSON.stringify(payload),
-  }).then((res) => console.log(res.json())
-  );
+  })
+  // console.log(res);
   return res
 }
 
@@ -49,6 +49,9 @@ async function deleteItem(key) {
   try {
     const response = await fetch(url, {
       method: 'DELETE',
+      headers: {
+        'Authorization': `Token ${STORAGETOKEN}`,
+      }
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -62,7 +65,12 @@ async function deleteItem(key) {
 
 async function getItem(key) {
   const url = `${STORAGEURL}${key}/`; // Korrigierte URL mit Protokoll
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Token ${STORAGETOKEN}`,
+    }
+  });
   const data = await response.json(); // Die Antwort als JSON parsen
   return data; // Rückgabe des gesamten Datenobjekts
 }
@@ -102,7 +110,6 @@ async function loginRequest(email, password) {
       return response.json(); // oder response.text() für textbasierten Response
     })
     .then(data => {
-      console.log('Erfolgreiche Antwort:', data);
       responseAsJSON = data;
     })
     .catch(error => {
@@ -119,21 +126,14 @@ async function loginRequest(email, password) {
 async function loadTasks() {
   try {
     tasks = await getItem("api/tasks");
-    tasks.forEach(element => {
-      console.log(element);
-    });
   } catch (e) {
     console.error("Loading error:", e);
   }
 }
 
 async function loadTasksCard(id) {
-  console.log(id);
   try {
     task = await getItem(`api/tasks/${id}`);
-
-    console.log(task);
-
   } catch (e) {
     console.error("Loading error:", e);
   }
@@ -161,13 +161,16 @@ async function loadContacts() {
 async function loadRemoteUser() {
   remoteuserassign = [];
   try {
-    const response = await fetch(`${STORAGEURL}api/users/`);
+    const response = await fetch(`${STORAGEURL}api/users/`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Token ${STORAGETOKEN}`,
+      }
+    });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-    const remoteuser = await response.json();
-    console.log(remoteuser);
-    
+    const remoteuser = await response.json();    
     for (let i = 0; i < remoteuser.length; i++) {
       if (remoteuser[i].id !== 999 && remoteuser[i].is_superuser === false) {
         remoteuserassign.push(remoteuser[i]);

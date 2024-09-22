@@ -83,7 +83,6 @@ async function deleteContact(userid) {
   const indextodelete = contacts.findIndex((contact) => contact.id === userid);
   // if (indextodelete !== -1) {
     contacts.splice(indextodelete, 1);
-    console.log(userid);
     
     await deleteItem(`api/contacts/${userid}`);
     document.getElementById("contact_info").innerHTML = "";

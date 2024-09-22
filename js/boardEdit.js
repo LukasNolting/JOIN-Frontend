@@ -15,8 +15,7 @@ async function editTasksfromStorage(i) {
   currenttask["prio"] = taskpriority;
   tasks[i] = currenttask;
   setInitialsEdit();
-  closeCardContainer();
-  console.log(currenttask);  
+  closeCardContainer(); 
   await putItem(`api/tasks/${task.id}`, currenttask);
   await renderBoardTasks();
   subtasksMessageEditBoard();
@@ -232,11 +231,12 @@ function setInitialsEdit() {
     let initialsremote = remoteuserassign[index].initials;
     let usersremoteid = remoteuserassign[index].id;
     let colorremote = remoteuserassign[index].color;
-    if (remoteuserassign[index]["id"] == index + 1) {
+    // if (remoteuserassign[index]["id"] == index + 1) {
       currenttask["assignedTo"].push(initialsremote);
       currenttask["assignedToID"].push(usersremoteid);
       currenttask["colors"].push(colorremote);
-    }
+      console.log(currenttask);
+    // }
   }
 }
 
@@ -270,7 +270,6 @@ function filterCategory(categorys, searchinput) {
  */
 async function deleteTask(i) {
   taskid = tasks[i]["id"];
-  console.log(taskid);
   await deleteItem(`api/tasks/${taskid}`);
   loadTasks();
   updateHTML();
@@ -287,10 +286,8 @@ async function deleteTask(i) {
  */
 async function checkSubtasks(taskindex, subtaskid) {
   let status = document.getElementById(`subtask${subtaskid}`).checked;
-  console.log(status);
   currenttask.subtasks[subtaskid]["subtaskStatus"] = status;
   let task = tasks[taskindex];
-  console.log(task);
   await putItem(`api/tasks/${task.id}`, task);
   // updateHTML();
 }
